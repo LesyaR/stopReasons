@@ -1,18 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Nov 23 07:44:19 2021
 
-@author: olesyar
-"""
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Sep 29 12:15:38 2021
-
-@author: olesyar
-"""
 # Libraries
 import pandas as pd
 import torch
@@ -67,10 +53,8 @@ def create_predictions(df):
     test_inputs, test_masks = preprocessing_for_bert(df[df["why_stopped"].notnull()].why_stopped)
     # Create the DataLoader for our test set
     test_dataset = TensorDataset(test_inputs, test_masks)
-    test_sampler = SequentialSampler(test_dataset)
-    test_dataloader = DataLoader(test_dataset, sampler=test_sampler, batch_size=32)
     print('The test set is ready')
-    return test_dataloader
+    return test_dataset
 
 # =============================================================================
 # make predictions

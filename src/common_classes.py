@@ -6,6 +6,8 @@ Created on Tue Nov 23 08:30:21 2021
 @author: olesyar
 """
 import torch.nn as nn
+import pkg_resources
+pkg_resources.require("Transformers==3.0.2")
 from transformers import BertModel
 import re
 from transformers import BertTokenizer
@@ -149,16 +151,16 @@ def bert_predict(model, dataloader):
     model.eval()
 
     all_logits = []
-
+    
     # For each batch in our test set...
-    for batch in dataloader:
         # Load batch to GPU
-        b_input_ids, b_attn_mask = tuple(t.to(device) for t in batch)[:2]
-
+    # the dataloaser is a list of tensors (in our case, two tensors per dimension, inputs and masks)
+    b_input_ids, b_attn_mask = dataloader[:len(dataloader)]
         # Compute logits
-        with torch.no_grad():
-            logits = model(b_input_ids, b_attn_mask)
-        all_logits.append(logits)
+    with torch.no_grad():
+        logits = model(b_input_ids, b_attn_mask)
+        print(logits)
+    all_logits.append(logits)
     
     # Concatenate logits from each batch
     all_logits = torch.cat(all_logits, dim=0)
